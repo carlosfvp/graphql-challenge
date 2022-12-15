@@ -1,1 +1,1 @@
-# graphql-code-challenge
+# graphql-code-challenge-scaffold
