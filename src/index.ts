@@ -10,7 +10,7 @@ const start = async () => {
   await mockDatabase();
 
   app.listen(3000, () => {
-    console.log("Listening on port http://localhost:3000");
+    console.log('Running a GraphQL API server at http://localhost:3000/graphql');
   });
 };
 
