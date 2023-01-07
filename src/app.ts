@@ -41,16 +41,16 @@ const appTypeDefs = `
   }
 `;
 
-type Post = {
-  title: string;
-  body: string;
-  comments: [Comment];
+type PostDto = {
+  title?: string;
+  body?: string;
+  comments?: CommentDto[];
 };
 
-type Comment = {
-  name: string;
-  email: string;
-  body: string;
+type CommentDto = {
+  name?: string;
+  email?: string;
+  body?: string;
 };
 
 const schema = makeExecutableSchema({
@@ -59,10 +59,27 @@ const schema = makeExecutableSchema({
 
 const root = {
   posts: async () => {
+    let postsArr: PostDto[] = [];
     const posts = await Post.find().exec();
-    console.log(posts);
 
-    return posts;
+    for (const i in posts) {
+      const p = posts[i];
+      const comments = await Comment.find({ $in: p.comments }).exec();
+      postsArr.push({
+        title: p.title,
+        body: p.body,
+        comments: comments.map((c) => {
+          let comment: CommentDto = {
+            name: c.name,
+            email: c.email,
+            body: c.body,
+          };
+          return comment;
+        }),
+      });
+    }
+
+    return postsArr;
   },
 };
 
